@@ -107,4 +107,4 @@ Author:
 Anton Kasyanov (antony.kasyanov@gmail.com)
 
 Special thanks to:
-Ruslan Diduk, Igor Emelyanov
+Ruslan Didyk, Igor Emelyanov
