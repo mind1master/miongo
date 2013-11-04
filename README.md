@@ -11,21 +11,21 @@ Still in development, feedback is highly appreciated.
 Usage Examples
 ==============
 
-Installation::
+Installation
 
     pip install miongo
 
 Models
 -------------
 
-Here's a simple example of model usage::
+Here's a simple example of model usage
 
     #!/usr/bin/env python
     import pymongo
     from miongo import models
 
     # this is always required
-    # mingo do not implement mongodb connection, you should do that
+    # miongo do not implement mongodb connection, you should do that
     models.mongodb_database = pymongo.MongoClient().test_database
 
 
@@ -51,8 +51,8 @@ Here's a simple example of model usage::
 
 Signals
 -------
-Can be used with your models too.
-Here's an example of implementing before and after save signals::
+Can be used with your models too!
+Here's an example of implementing before and after save signals
 
     #!/usr/bin/env python
     import pymongo
