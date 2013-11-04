@@ -51,7 +51,8 @@ Here's a simple example of model usage
 
 Signals
 -------
-Can be used with your models too!
+Signals can be used independently with your models too! Just use `signals.SignalEmitterMixin`, specify `AVAILABLE_SIGNALS` and call `self.emit_signal(signal_type)` to fire a signal when needed.
+
 Here's an example of implementing before and after save signals
 
     #!/usr/bin/env python
