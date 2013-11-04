@@ -1,65 +1,27 @@
 import unittest
+import pymongo
 
-from models import *
-from signals import *
-
-class TestModel(Model):
-    _collection = 'testmodel'
-
-    uid = Field()
-    name = Field()
-
-class TestBaseModel(unittest.TestCase):
-
-    def test_save(self):
-        model = TestModel()
-        model.uid = 1
-        model.name = 'Anton'
-
-        model.save()
-        saved = self.mongodb.testmodel.find_one({'uid': 1})
-        self.assertTrue(saved)
-        self.assertEqual(saved['name'], 'Anton')
-
-    def test_find(self):
-        self.mongodb.testmodel.insert({'uid': 1, 'name': 'John'})
-        model = TestModel()
-
-        model.find({'uid': 1})
-        self.assertEqual(model.name, 'John')
-        self.assertEqual(model.uid, 1)
-
-    def test_delete(self):
-        model = TestModel()
-        model.uid = 1
-        model.name = 'Anton'
-        model.save()
-        self.assertEquals(self.mongodb.testmodel.count(), 1)
-        model.delete()
-        self.assertEquals(self.mongodb.testmodel.count(), 0)
-
-    def test_two_instances(self):
-        model1 = TestModel()
-        model1.uid = 1
-        model1.name = 'Anton'
-
-        model2 = TestModel()
-        model2.uid = 2
-        model2.name = 'John'
-        self.assertEquals(model1.uid, 1)
-        self.assertEquals(model2.uid, 2)
+from .. import signals
+from .. import models
 
 # SIGNAL TESTS
 
-class BaseModel(object):
+models.mongodb_database = pymongo.MongoClient().test_database
+
+
+class BaseModel(models.Model):
+    _collection = 'testmodel'
+
     def __init__(self):
+        super(BaseModel, self).__init__()
         self.a = 1
         self.b = 1
 
     def inc_a(self):
         self.a += 1
 
-class TestModel(BaseModel, SignalEmitterMixin):
+
+class TestModel(BaseModel, signals.SignalEmitterMixin):
     BEFORE_INC = 0
     AFTER_INC = 1
     AVAILABLE_SIGNALS = [BEFORE_INC, AFTER_INC]
@@ -160,3 +122,6 @@ class TestSignalsForClass(unittest.TestCase):
         model.inc_a()
         self.assertEqual(model.a, 3)  # second inc is done by signal_function_2
         self.assertEqual(model.b, 5)
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,12 +1,15 @@
 
-""" Singleton decorator """
+
 def singleton(cls):
+    """ Singleton decorator """
     singletone_instances = {}
+
     def getinstance():
         if cls not in singletone_instances:
             singletone_instances[cls] = cls()
         return singletone_instances[cls]
     return getinstance
+
 
 @singleton
 class SignalRegistry(dict):

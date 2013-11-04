@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import copy
 
-__all__ = ['Field', 'Model']
+
+mongodb_database = None
+
 
 class ModelMetaClass(type):
     def __new__(cls, name, bases, _dict):
@@ -15,6 +17,7 @@ class ModelMetaClass(type):
                 _dict['_fields'] += getattr(base, '_fields', [])
 
         return type.__new__(cls, name, bases, _dict)
+
 
 class BaseFieldClass(object):
     def __init__(self, default=None):
@@ -30,6 +33,7 @@ class BaseFieldClass(object):
     def default(self):
         return copy.deepcopy(self.default)
 
+
 class Field(object):
     """
     This is basically a factory for BaseFieldClass.
@@ -40,6 +44,7 @@ class Field(object):
 
     def construct(self):
         return BaseFieldClass(default=self.default)
+
 
 class Model(object):
     __metaclass__ = ModelMetaClass
@@ -54,7 +59,7 @@ class Model(object):
     def __init__(self):
 
         super(Model, self).__init__()
-        self._objects = getattr(self.db, self._collection)
+        self._objects = getattr(mongodb_database, self._collection)
 
         # constructing fields from Field factory
         for field in self._fields:
@@ -90,7 +95,6 @@ class Model(object):
                 if k in self._fields:
                     setattr(self, k, v)
         return bool(found)
-
 
     def delete(self, where=None):
         if where:
